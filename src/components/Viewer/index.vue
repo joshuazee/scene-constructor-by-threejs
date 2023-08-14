@@ -48,9 +48,10 @@ onMounted(() => {
     height: height,
     showAxesHelper: true,
     mouseInteraction: true,
+    interActionType: 1,
     cssRenderer: false
   });
-  // drawArea();
+  view.setBackground({ alpha: 1, color: '#000' });
   view.animate(viewRenderCallback);
 });
 
@@ -58,7 +59,6 @@ onMounted(() => {
 const calcSize = () => {
   if (containerRef.value) {
     const w = Math.max((containerRef.value as Element).clientWidth, 400);
-    // const h = Math.round(w * 0.618);
     const h = Math.max((containerRef.value as Element).clientHeight, 400);
     return {
       width: w,

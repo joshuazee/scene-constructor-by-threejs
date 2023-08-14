@@ -7,8 +7,11 @@ import {
   Raycaster,
   Vector2
 } from 'three';
-import { CSS2DRenderer } from '../lib/CSS2DRenderer';
-import { MapControls, OrbitControls } from '../lib/controls/OrbitControls';
+// import { CSS2DRenderer } from '../lib/CSS2DRenderer';
+// import { MapControls, OrbitControls } from '../lib/controls/OrbitControls';
+import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer';
+import { OrbitControls } from 'three/addons/controls/OrbitControls';
+import { MapControls } from 'three/addons/controls/MapControls';
 export default class ViewBase {
   constructor(options = {}) {
     const {
@@ -28,7 +31,7 @@ export default class ViewBase {
       alpha: true
     });
     this.renderer.setSize(width, height);
-    this.renderer.setClearColor(new TColor(0x000000));
+    this.renderer.setClearColor(new TColor(0x000000), 0);
     target.appendChild(this.renderer.domElement);
     if (cssRenderer === true) {
       this.renderer2 = new CSS2DRenderer();
@@ -39,7 +42,9 @@ export default class ViewBase {
       target.appendChild(this.renderer2.domElement);
     }
 
-    this.camera = new PerspectiveCamera(45, width / height, 1, width * 2);
+    this.camera = new PerspectiveCamera(75, width / height, 1, width * 2);
+    this.camera.lookAt(0, 0, 0);
+    this.camera.position.set(100, 100, 100);
 
     this.scene = new Scene();
 
@@ -52,11 +57,11 @@ export default class ViewBase {
     }
 
     if (showAxesHelper === true) {
-      const axes = new AxesHelper(width);
+      const axes = new AxesHelper(100);
       this.scene.add(axes);
     }
 
-    this.raycaster = new Raycaster();
+    // this.raycaster = new Raycaster();
   }
   animate(callback) {
     requestAnimationFrame(() => {
