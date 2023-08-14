@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import viewer from '@/components/Viewer/index.vue';
+import viewer from '@/components/map-viewer/index.vue';
 </script>
 
 <style lang="less" scoped>
@@ -17,3 +17,4 @@ import viewer from '@/components/Viewer/index.vue';
   }
 }
 </style>
+@/components/viewer/index.vue
