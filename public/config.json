@@ -1,3 +1,67 @@
 {
-  "layers": []
+  "layers": [
+    {
+      "title": "墙",
+      "type": 99,
+      "children": [
+        {
+          "title": "墙#1",
+          "type": 0,
+          "visible": true
+        },
+        {
+          "title": "墙#2",
+          "type": 0,
+          "visible": true
+        },
+        {
+          "title": "墙#3",
+          "type": 0,
+          "visible": true
+        },
+        {
+          "title": "墙#4",
+          "type": 0,
+          "visible": true
+        },
+        {
+          "title": "地板",
+          "type": 0,
+          "visible": true
+        },
+        {
+          "title": "天花板",
+          "type": 0,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "title": "门",
+      "type": 99,
+      "children": [
+        {
+          "title": "门#1",
+          "type": 1,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "title": "窗",
+      "type": 99,
+      "children": [
+        {
+          "title": "窗#1",
+          "type": 2,
+          "visible": true
+        },
+        {
+          "title": "窗#2",
+          "type": 2,
+          "visible": true
+        }
+      ]
+    }
+  ]
 }

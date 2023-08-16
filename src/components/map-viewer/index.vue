@@ -8,12 +8,12 @@
 import BaseView from 'pkg/three/view/view-base';
 import { ref, onMounted, computed } from 'vue';
 // import { createGeoPlate } from 'pkg/three/entities/geo-plate';
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 // import { formatFeatureCollectionData2, calcCameraPosition, useProjection } from './util';
 // import axios from 'axios';
 // import { Color, type Object3D } from 'three';
 
-const store = useStore();
+// const store = useStore();
 const containerRef = ref<string | Element>('');
 const mapRef = ref<string | Element>('');
 

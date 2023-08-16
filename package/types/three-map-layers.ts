@@ -3,7 +3,8 @@ import type { WallLayer } from 'pkg/layer/wall-layer';
 export enum LayerType {
   WALL,
   DOOR,
-  WINDOW
+  WINDOW,
+  GROUP = 99
 }
 
 export enum LegendsType {
@@ -34,12 +35,13 @@ export interface LegendsOptions {
 
 export interface BaseLayerOptions {
   key?: string;
-  title?: string;
+  title: string;
   type: LayerType;
   hasLegends?: boolean;
   legends?: LegendsOptions;
   url?: string;
   visible?: boolean;
+  children?: Array<AnyLayerOptions>;
 }
 
 export interface WallOptions extends BaseLayerOptions {
