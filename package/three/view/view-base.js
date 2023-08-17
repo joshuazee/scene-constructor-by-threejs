@@ -61,7 +61,7 @@ export default class ViewBase {
       this.scene.add(axes);
     }
 
-    // this.raycaster = new Raycaster();
+    this.raycaster = new Raycaster();
   }
   animate(callback) {
     requestAnimationFrame(() => {
@@ -70,7 +70,7 @@ export default class ViewBase {
 
     this.render();
 
-    callback();
+    callback && callback();
   }
   render() {
     this.renderer.render(this.scene, this.camera);

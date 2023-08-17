@@ -2,43 +2,25 @@
   <div ref="containerRef" class="three-map-container">
     <div ref="mapRef"></div>
   </div>
+  <layer-controller
+    ref="layerControllerRef"
+    @load-completed="handleLoadCompleted"
+  ></layer-controller>
 </template>
 
 <script lang="ts" setup>
 import BaseView from 'pkg/three/view/view-base';
 import { ref, onMounted, computed } from 'vue';
-// import { createGeoPlate } from 'pkg/three/entities/geo-plate';
+import LayerController from '@/components/layer-controller.vue';
 // import { useStore } from 'vuex';
-// import { formatFeatureCollectionData2, calcCameraPosition, useProjection } from './util';
-// import axios from 'axios';
-// import { Color, type Object3D } from 'three';
+import { type Object3D } from 'three';
 
 // const store = useStore();
 const containerRef = ref<string | Element>('');
 const mapRef = ref<string | Element>('');
+const layerControllerRef = ref();
 
 let view: BaseView;
-// , plate: Object3D;
-
-// const mapFillColor = '#296bb5',
-//   mapFillOpacity = 0.7,
-//   mapHightlightColor = '#00fffc',
-//   mapTopLineColor = '#FFF',
-//   mapTopLineWidth = 1,
-//   billboardConfig = {
-//     active: {
-//       padding: '2px 5px',
-//       color: '#bd3e0d',
-//       background: '#ffd133'
-//     },
-//     custom: {
-//       padding: '0',
-//       color: '#fff',
-//       background: 'transparent'
-//     }
-//   },
-//   // nameField = "NAME",
-//   codeField = 'REGIONCODE';
 
 onMounted(() => {
   const { width, height } = calcSize();
@@ -52,7 +34,7 @@ onMounted(() => {
     cssRenderer: false
   });
   view.setBackground({ alpha: 1, color: '#000' });
-  view.animate(viewRenderCallback);
+  view.animate();
 });
 
 //methods
@@ -71,7 +53,10 @@ const calcSize = () => {
   };
 };
 
-const viewRenderCallback = () => {};
+const handleLoadCompleted = () => {
+  console.log(view);
+  layerControllerRef.value.setMap(view);
+};
 
 // const _lastFeature = ref<any>();
 
@@ -109,9 +94,9 @@ const viewRenderCallback = () => {};
 //   }
 // });
 
-const onMapClickHandler = (features: any) => {
-  // lastFeature.value = features[0]?.object;
-};
+// const onMapClickHandler = (features: any) => {
+// lastFeature.value = features[0]?.object;
+// };
 
 // const drawArea = () => {
 //   const currentRegion = store.state.sub.activeRegion;
@@ -171,15 +156,16 @@ const onMapClickHandler = (features: any) => {
 //   };
 // };
 
-const setCameraPosition = (theta: number, phi: number, radius: number) => {
-  const position = calcCameraPosition(radius, phi + 90, theta);
-  view.camera.position.set(position.x, position.y, position.z);
-  view.camera.lookAt(0, 0, 0);
-};
+// const setCameraPosition = (theta: number, phi: number, radius: number) => {
+//   const position = calcCameraPosition(radius, phi + 90, theta);
+//   view.camera.position.set(position.x, position.y, position.z);
+//   view.camera.lookAt(0, 0, 0);
+// };
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
 .three-map-container {
   position: relative;
+  height: 100%;
 }
 </style>

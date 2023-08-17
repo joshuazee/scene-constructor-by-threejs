@@ -10,15 +10,25 @@
           </el-icon>
         </div>
         <el-tree
+          ref="treeRef"
           :data="layerTreeData"
           class="tree-cls"
           show-checkbox
           node-key="key"
           :default-expanded-keys="defaultExpandedKes"
           :default-checked-keys="defaultCheckedKeys"
+          @check-change="handleCheckChange"
+          @check="handleCheck"
         >
           <template v-slot="{ node, data }">
-            <div>{{ data.title }}</div>
+            <div class="tree-node-cls">
+              <span @click.stop="setChecked(node)">{{ data.title }}</span>
+              <el-switch
+                v-if="data.hasLegends === true"
+                v-model="data.showLegends"
+                size="small"
+              ></el-switch>
+            </div>
           </template>
         </el-tree>
       </div>
@@ -29,57 +39,81 @@
 
 <script lang="ts" setup>
 import { Close } from '@element-plus/icons-vue';
-import { computed, ref } from 'vue';
+import { watch, ref } from 'vue';
 import { useStore } from 'vuex';
 import { v4 as uuid } from 'uuid';
-// import type { AnyLayerOptions } from 'pkg/types/three-map-layers';
+import { LayerController } from 'pkg/control/layer-controller';
 
+const emits = defineEmits(['load-completed']);
 const store = useStore();
-
+const treeRef = ref();
 const showPane = ref(false);
 const showLegends = ref(false);
 const defaultExpandedKes = ref<Array<string>>([]);
 const defaultCheckedKeys = ref<Array<string>>([]);
 
-const layerTreeData = computed<Array<any>>(() => {
-  const data = store.state.map.layers;
-  if (data && data.length > 0) {
-    const stack = [...data];
-    while (stack.length > 0) {
-      const node = stack.pop();
-      !node.key && (node.key = uuid());
-      if (node.children) {
-        defaultExpandedKes.value.push(node.key);
-        stack.push(...node.children);
-      } else {
-        if (node.visible) {
-          defaultCheckedKeys.value.push(node.key);
+const control = new LayerController();
+
+const layerTreeData = ref([]);
+watch(
+  () => store.state.map.layers,
+  (data) => {
+    if (data && data.length > 0) {
+      const stack = [...data];
+      while (stack.length > 0) {
+        const node = stack.pop();
+        !node.key && (node.key = uuid());
+        if (node.children) {
+          node.expand && defaultExpandedKes.value.push(node.key);
+          stack.push(...node.children);
+        } else {
+          control.add(node);
+          if (node.visible) {
+            defaultCheckedKeys.value.push(node.key);
+          }
         }
       }
+      emits('load-completed');
+      layerTreeData.value = data;
     }
   }
-  return data;
-});
+);
+
+const setChecked = (node: any) => {
+  treeRef.value.setChecked(node.key, !node.checked);
+};
+
+const handleCheckChange = (node: any, checked: any, children: any) => {
+  console.log(node, checked, children);
+};
+
+const handleCheck = (node: any, p: any) => {
+  console.log(node, p);
+};
+
+const setMap = (mapView: any) => {
+  control.setMap(mapView);
+};
+
+defineExpose({ setMap });
 </script>
 
 <style lang="less" scoped>
 .layer-controller-container {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 2em;
+  left: 2em;
 
   .layer-controller-icon {
     padding: 0.5em 1em;
     border-radius: 3px;
     background: @themeColor;
     color: #fff;
-    margin: 2em;
     cursor: pointer;
   }
   .layer-controller-pane {
-    margin: 2em;
-    min-width: 20em;
-    min-height: 40em;
+    width: 20em;
+    height: 35em;
     background: #fff;
 
     .layer-controller-pane-header {
@@ -106,6 +140,11 @@ const layerTreeData = computed<Array<any>>(() => {
       padding: 1em;
       // background: @themeColor;
       // color: #fff;
+      .tree-node-cls {
+        min-width: 25em;
+        display: flex;
+        justify-content: space-between;
+      }
     }
   }
 }
