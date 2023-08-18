@@ -1,9 +1,9 @@
+import type { FloorLayer } from 'pkg/layer/floor-layer';
 import type { WallLayer } from 'pkg/layer/wall-layer';
 
 export enum LayerType {
   WALL,
-  DOOR,
-  WINDOW
+  FLOOR
 }
 
 export enum LegendsType {
@@ -43,18 +43,26 @@ export interface BaseLayerOptions {
   children?: Array<AnyLayerOptions>;
 }
 
+export interface FloorOptions extends BaseLayerOptions {
+  type: LayerType.FLOOR;
+  coordinates: Array<[number, number]>;
+  height: number;
+  bottomHeight: number;
+  center: [number, number];
+  color: string;
+}
+
 export interface WallOptions extends BaseLayerOptions {
   type: LayerType.WALL;
+  width: number;
+  height: number;
+  depth: number;
+  center: [number, number];
+  rotate: number;
+  color: string;
+  opacity: number;
 }
 
-export interface DoorOptions extends BaseLayerOptions {
-  type: LayerType.DOOR;
-}
+export type AnyLayer = WallLayer | FloorLayer;
 
-export interface WindowOptions extends BaseLayerOptions {
-  type: LayerType.WINDOW;
-}
-
-export type AnyLayer = WallLayer;
-
-export type AnyLayerOptions = WallOptions | DoorOptions | WindowOptions | GroupOptions;
+export type AnyLayerOptions = WallOptions | FloorOptions;

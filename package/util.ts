@@ -1,13 +1,21 @@
+export const coordinateTransfer2 = ([x, y]: [number, number]) => {
+  return [x, -y];
+};
+
+export const coordinateTransfer3 = ([x, y, z]: [number, number, number]) => {
+  return [x, -z, y];
+};
+
 export const resolveShellByGeoJSON = (
   geojson: any,
   callback: (coordinates: any, properties: any) => void
 ) => {
-  if (geojson.type === "FeatureCollection") {
+  if (geojson.type === 'FeatureCollection') {
     geojson.features.forEach((feature: any) => {
       if (feature.geometry) {
-        if (feature.geometry.type === "Polygon") {
+        if (feature.geometry.type === 'Polygon') {
           callback(feature.geometry.coordinates[0], feature.properties);
-        } else if (feature.geometry.type === "MultiPolygon") {
+        } else if (feature.geometry.type === 'MultiPolygon') {
           const properties = feature.properties;
           const coordinates = feature.geometry.coordinates;
           coordinates.forEach((coord: any) => {
@@ -16,16 +24,16 @@ export const resolveShellByGeoJSON = (
         }
       }
     });
-  } else if (geojson.type === "GeometryCollection") {
+  } else if (geojson.type === 'GeometryCollection') {
     geojson.geometries.forEach((geometry: any) => {
-      if (geometry.type === "Polygon") {
+      if (geometry.type === 'Polygon') {
         callback(geometry.coordinates[0], undefined);
-      } else if (geometry.type === "LineString") {
+      } else if (geometry.type === 'LineString') {
         callback(geometry.coordinates, undefined);
       }
     });
   } else {
-    throw "请传入FeatureCollection<Polygon>";
+    throw '请传入FeatureCollection<Polygon>';
   }
 };
 
@@ -33,12 +41,12 @@ export const resolvePointByGeoJSON = (
   geojson: any,
   callback: (point: any, properties: any) => void
 ) => {
-  if (geojson.type === "FeatureCollection") {
+  if (geojson.type === 'FeatureCollection') {
     geojson.features.forEach((feature: any) => {
       if (feature.geometry) {
-        if (feature.geometry.type === "Point") {
+        if (feature.geometry.type === 'Point') {
           callback(feature.geometry.coordinates, feature.properties);
-        } else if (feature.geometry.type === "MultiPoint") {
+        } else if (feature.geometry.type === 'MultiPoint') {
           const properties = feature.properties;
           const coordinates = feature.geometry.coordinates;
           coordinates.forEach((coord: any) => {
@@ -48,6 +56,6 @@ export const resolvePointByGeoJSON = (
       }
     });
   } else {
-    throw "请传入FeatureCollection<Point>";
+    throw '请传入FeatureCollection<Point>';
   }
 };

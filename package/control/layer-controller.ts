@@ -1,8 +1,7 @@
 import type { BaseLayer } from 'pkg/layer/base-layer';
 import { LayerType, type AnyLayerOptions } from '../types/three-map-layers';
 import { WallLayer } from 'pkg/layer/wall-layer';
-import { DoorLayer } from 'pkg/layer/door-layer';
-import { WindowLayer } from 'pkg/layer/window-layer';
+import { FloorLayer } from 'pkg/layer/floor-layer';
 
 export class LayerController {
   private layers: Array<BaseLayer>;
@@ -15,7 +14,6 @@ export class LayerController {
   }
   setMap(view: any) {
     this.view = view;
-
     this.layers.forEach((layer) => {
       layer.origin && this.view.scene.add(layer.origin);
     });
@@ -27,11 +25,8 @@ export class LayerController {
       case LayerType.WALL:
         layer = new WallLayer(options);
         break;
-      case LayerType.DOOR:
-        layer = new DoorLayer(options);
-        break;
-      case LayerType.WINDOW:
-        layer = new WindowLayer(options);
+      case LayerType.FLOOR:
+        layer = new FloorLayer(options);
         break;
       default:
         throw 'invalidated layer constructor options';

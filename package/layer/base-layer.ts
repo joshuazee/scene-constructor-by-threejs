@@ -1,8 +1,9 @@
-import type { BaseLayerOptions, LayerType } from 'pkg/types/three-map-layers';
+import type { AnyLayerOptions, BaseLayerOptions, LayerType } from 'pkg/types/three-map-layers';
 import { Object3D } from 'three';
 
 export abstract class BaseLayer {
   key: string;
+  title: string;
   type: LayerType;
   visible: boolean;
   origin: Object3D | undefined;
@@ -10,10 +11,11 @@ export abstract class BaseLayer {
     this.key = options.key || '';
     this.visible = options.visible || true;
     this.type = options.type;
-
-    this.load();
+    this.title = options.title;
   }
-  abstract setVisible(visible: boolean): void;
-  abstract load(): void;
+  setVisible(visible: boolean) {
+    this.origin && (this.origin.visible = visible);
+  }
+  abstract load(options: AnyLayerOptions): void;
   // abstract unload(): void;
 }
