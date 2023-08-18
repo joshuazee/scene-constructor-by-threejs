@@ -18,7 +18,6 @@
           :default-expanded-keys="defaultExpandedKes"
           :default-checked-keys="defaultCheckedKeys"
           @check-change="handleCheckChange"
-          @check="handleCheck"
         >
           <template v-slot="{ node, data }">
             <div class="tree-node-cls">
@@ -83,12 +82,10 @@ const setChecked = (node: any) => {
   treeRef.value.setChecked(node.key, !node.checked);
 };
 
-const handleCheckChange = (node: any, checked: any, children: any) => {
-  console.log(node, checked, children);
-};
-
-const handleCheck = (node: any, p: any) => {
-  console.log(node, p);
+const handleCheckChange = (node: any, checked: any) => {
+  if (!node.children) {
+    control.setVisible(node.key, checked);
+  }
 };
 
 const setMap = (mapView: any) => {

@@ -61,6 +61,13 @@ export interface WallOptions extends BaseLayerOptions {
   rotate: number;
   color: string;
   opacity: number;
+  doors: DoorOptions[];
+}
+
+export interface DoorOptions {
+  width: number;
+  height: number;
+  center: [number, number];
 }
 
 export type AnyLayer = WallLayer | FloorLayer;
