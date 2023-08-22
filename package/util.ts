@@ -1,9 +1,5 @@
-export const coordinateTransfer2 = ([x, y]: [number, number]) => {
-  return [x, -y];
-};
-
 export const coordinateTransfer3 = ([x, y, z]: [number, number, number]) => {
-  return [x, -z, y];
+  return [x, z, y];
 };
 
 export const resolveShellByGeoJSON = (
