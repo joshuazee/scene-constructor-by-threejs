@@ -36,19 +36,18 @@
           "height": 30,
           "width": 100,
           "rotate": 0,
-          "depth": 5,
+          "depth": 1,
           "color": "#ccc",
           "opacity": 0.6,
           "doors": [
             {
               "width": 10,
               "height": 20,
-              "center": [0, 0],
-              "depth": 5,
+              "center": [10, -2],
+              "depth": 2,
               "border": {
                 "width": 2,
                 "height": 4,
-                "depth": 3,
                 "color": "#F3FDE8"
               }
             }

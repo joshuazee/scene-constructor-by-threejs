@@ -1,10 +1,15 @@
-import type { WindowOptions, DoorOptions, WallOptions } from 'pkg/types/three-map-layers';
+import type { DoorWindowOptions, WallOptions } from 'pkg/types/three-map-layers';
 import { BaseLayer } from './base-layer';
-import { BoxGeometry, MeshBasicMaterial, Object3D, DoubleSide, Mesh } from 'three';
+import {
+  BoxGeometry,
+  MeshStandardMaterial,
+  MeshBasicMaterial,
+  Object3D,
+  DoubleSide,
+  Mesh
+} from 'three';
 import { degreesToRadians } from '@turf/helpers';
-import * as THREE from 'three';
-import jthreebsp from 'jthreebsp';
-const ThreeBSP = jthreebsp(THREE);
+import OctreeCSG from 'pkg/lib/OctreeCSG/OctreeCSG.js';
 
 export class WallLayer extends BaseLayer {
   constructor(options: WallOptions) {
@@ -22,43 +27,42 @@ export class WallLayer extends BaseLayer {
       side: DoubleSide
     });
     let wall = new Mesh(geometry, material);
-    wall.position.x = center[0];
-    wall.position.y = height / 2;
-    wall.position.z = center[1];
-    wall.rotateY(degreesToRadians(rotate));
 
     if (doors && doors.length > 0) {
       doors.forEach((door) => {
-        const result = createDoorModel(wall, door);
+        const result = createDoorWindowModel(wall, door);
+        //@ts-ignore
         wall = result.wall;
-        o3d.add(result.door, result.border);
+        //@ts-ignore
+        o3d.add(result.obj, result.border);
       });
     }
 
     if (windows && windows.length > 0) {
       windows.forEach((window) => {
-        const result = createWindowModel(wall, window);
+        const result = createDoorWindowModel(wall, window);
+        //@ts-ignore
         wall = result.wall;
+        //@ts-ignore
         o3d.add(result.door, result.border);
       });
     }
 
     o3d.add(wall);
 
+    o3d.position.x = center[0];
+    o3d.position.y = height / 2;
+    o3d.position.z = center[1];
+    o3d.rotateY(degreesToRadians(rotate));
+
     this.origin = o3d;
   }
   unload() {}
 }
 
-const createDoorModel = (wall: Mesh, options: DoorOptions) => {
-  const wallBSP = new ThreeBSP(wall);
+const createDoorWindowModel = (wall: Mesh, options: DoorWindowOptions) => {
   const { width, height, depth, center, border } = options;
-  const {
-    width: borderWidth,
-    height: borderHeight,
-    depth: borderDepth,
-    color: borderColor
-  } = border;
+  const { width: borderWidth, height: borderHeight, color: borderColor } = border;
   const geometry = new BoxGeometry(width, height, depth);
   const material = new MeshBasicMaterial({
     color: '#ff0',
@@ -67,12 +71,9 @@ const createDoorModel = (wall: Mesh, options: DoorOptions) => {
     side: DoubleSide
   });
   let door = new Mesh(geometry, material);
-  const doorBSP = new ThreeBSP(door);
-  const borderGeometry = new BoxGeometry(
-    width + borderWidth,
-    height + borderHeight,
-    depth + borderDepth
-  );
+  door.position.setX(center[0]);
+  door.position.setY(center[1]);
+  const borderGeometry = new BoxGeometry(width + borderWidth, height + borderHeight, depth);
   const borderMaterial = new MeshBasicMaterial({
     color: borderColor,
     transparent: true,
@@ -80,29 +81,10 @@ const createDoorModel = (wall: Mesh, options: DoorOptions) => {
     side: DoubleSide
   });
   let doorBorder = new Mesh(borderGeometry, borderMaterial);
-  const borderBSP = new ThreeBSP(doorBorder);
-  const newWall = wallBSP.subtract(borderBSP);
-  doorBorder = borderBSP.subtract(doorBSP);
-  return { wall: newWall, door: door, border: doorBorder };
-};
+  doorBorder.position.setX(center[0]);
+  doorBorder.position.setY(center[1]);
+  const newWall = OctreeCSG.meshSubtract(wall, doorBorder);
+  const newBorder = OctreeCSG.meshSubtract(doorBorder, door);
 
-const createWindowModel = (wall: Mesh, options: WindowOptions) => {
-  const wallBSP = ThreeBSP(wall);
-  const { width, height, depth, center, border } = options;
-  const { width: borderWidth, height: borderHeight, depth: borderDepth } = border;
-  const geometry = new BoxGeometry(width, height, depth);
-  const material = new MeshBasicMaterial();
-  let door = new Mesh(geometry, material);
-  const doorBSP = new ThreeBSP(door);
-  const borderGeometry = new BoxGeometry(
-    width + borderWidth,
-    height + borderHeight,
-    depth + borderDepth
-  );
-  const borderMaterial = new MeshBasicMaterial();
-  let doorBorder = new Mesh(borderGeometry, borderMaterial);
-  const borderBSP = new ThreeBSP(doorBorder);
-  const newWall = wallBSP.subtract(borderBSP);
-  doorBorder = borderBSP.subtract(doorBSP);
-  return { wall: newWall, door: door, border: doorBorder };
+  return { wall: newWall, obj: door, border: newBorder };
 };

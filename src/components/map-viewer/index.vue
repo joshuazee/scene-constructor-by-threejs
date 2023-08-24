@@ -4,21 +4,24 @@
   </div>
   <layer-controller
     ref="layerControllerRef"
+    class="layer-controller-position"
     @load-completed="handleLoadCompleted"
   ></layer-controller>
+  <scene-builder v-if="editable" class="scene-builder-position"></scene-builder>
 </template>
 
 <script lang="ts" setup>
 import BaseView from 'pkg/three/view/view-base';
 import { ref, onMounted, computed } from 'vue';
-import LayerController from '@/components/layer-controller.vue';
+import LayerController from '../layer-controller.vue';
+import SceneBuilder from '../scene-builder.vue';
 // import { useStore } from 'vuex';
-import { type Object3D } from 'three';
 
 // const store = useStore();
 const containerRef = ref<string | Element>('');
 const mapRef = ref<string | Element>('');
 const layerControllerRef = ref();
+const editable = ref(true);
 
 let view: BaseView;
 
@@ -54,118 +57,23 @@ const calcSize = () => {
 };
 
 const handleLoadCompleted = () => {
-  console.log(view);
   layerControllerRef.value.setMap(view);
 };
-
-// const _lastFeature = ref<any>();
-
-// const lastFeature = computed({
-//   get: () => _lastFeature,
-//   set: (feature: any) => {
-//     if (_lastFeature.value) {
-//       const el: HTMLDivElement = _lastFeature.value.children[0].element;
-//       el.style.padding = billboardConfig.custom.padding;
-//       el.style.background = billboardConfig.custom.background;
-//       el.style.color = billboardConfig.custom.color;
-
-//       _lastFeature.value.material.forEach((material: any) => {
-//         material.color = new Color(mapFillColor);
-//       });
-//     }
-
-//     _lastFeature.value = feature;
-
-//     if (feature) {
-//       const properties = feature.properties;
-//       store.dispatch('sub/useActiveChildRegion', properties[codeField].toString());
-//       const materials = feature.material;
-//       materials.forEach((material: any) => {
-//         material.color = new Color(mapHightlightColor);
-//       });
-
-//       const el: HTMLDivElement = feature.children[0].element;
-//       el.style.padding = billboardConfig.active.padding;
-//       el.style.background = billboardConfig.active.background;
-//       el.style.color = billboardConfig.active.color;
-//     } else {
-//       store.dispatch('sub/useActiveChildRegion', '-1');
-//     }
-//   }
-// });
-
-// const onMapClickHandler = (features: any) => {
-// lastFeature.value = features[0]?.object;
-// };
-
-// const drawArea = () => {
-//   const currentRegion = store.state.sub.activeRegion;
-//   let dataURL = '',
-//     radius = 0,
-//     phi = 0,
-//     theta = 0,
-//     scale = 0,
-//     center: [number, number] = [0, 0],
-//     depth = 0;
-//   if (currentRegion) {
-//     dataURL = currentRegion.boundaryUrl;
-//     currentRegion.center && (center = currentRegion.center);
-//     currentRegion.depth && (depth = currentRegion.depth);
-//     currentRegion.scale && (scale = currentRegion.scale);
-//     if (currentRegion.cameraOpt) {
-//       radius = currentRegion.cameraOpt?.radius;
-//       theta = currentRegion.cameraOpt?.theta;
-//       phi = currentRegion.cameraOpt?.phi;
-//     }
-//   }
-//   if (dataURL) {
-//     axios.get(dataURL).then((response) => {
-//       drawFn(response.data);
-//     });
-//   }
-
-//   const drawFn = (data: any) => {
-//     const projection = useProjection({ center, scale });
-//     let plateData = formatFeatureCollectionData2(data, projection);
-//     plate = createGeoPlate(plateData, {
-//       boundaryData: undefined,
-//       depth,
-//       topUseTexture: false,
-//       topUseColorMix: true,
-//       topColor: mapFillColor,
-//       topOpacity: mapFillOpacity,
-//       sideColor: mapFillColor,
-//       sideOpacity: mapFillOpacity,
-//       openTopLine: true,
-//       lineColor: mapTopLineColor,
-//       lineWith: mapTopLineWidth
-//     });
-//     view.scene.add(plate);
-
-//     const child = store.state.sub.activeChildRegion;
-//     if (child) {
-//       const childPlate: any = plate.children[0].children.find(
-//         (p: any) => p.properties[codeField].toString() === child.regionCode
-//       );
-//       lastFeature.value = childPlate;
-//     }
-
-//     setCameraPosition(theta, phi, radius);
-
-//     view.pick({ type: 0, callback: onMapClickHandler }, plate.children[0].children);
-//   };
-// };
-
-// const setCameraPosition = (theta: number, phi: number, radius: number) => {
-//   const position = calcCameraPosition(radius, phi + 90, theta);
-//   view.camera.position.set(position.x, position.y, position.z);
-//   view.camera.lookAt(0, 0, 0);
-// };
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
 .three-map-container {
   position: relative;
   height: 100%;
+}
+.layer-controller-position {
+  position: absolute;
+  top: 2em;
+  left: 2em;
+}
+.scene-builder-position {
+  position: absolute;
+  right: 0;
+  top: 2em;
 }
 </style>

@@ -8,13 +8,23 @@ body,
   font-family: 'Microsoft Yahei';
 
   // 全局动画定义
-  .transform-slide-enter-active,
-  .transform-slide-leave-active {
+  .animate-transform-enter-active,
+  .animate-transform-leave-active {
     transition: transform 0.5s ease;
   }
 
-  .transform-slide-enter-from,
-  .transform-slide-leave-to {
-    transform: scale(0);
+  .animate-transform-enter-from,
+  .animate-transform-leave-to {
+    transform: translateX(-50%) translateY(-50%) scale(0);
+  }
+
+  .animate-slide-enter-active,
+  .animate-slide-leave-active {
+    transition: transform 0.5s ease;
+  }
+
+  .animate-slide-enter-from,
+  .animate-slide-leave-to {
+    transform: translateX(-50%);
   }
 }

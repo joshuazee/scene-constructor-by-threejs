@@ -1,6 +1,6 @@
 <template>
   <div class="layer-controller-container">
-    <transition name="transform-slide" mode="out-in">
+    <transition name="animate-transform" mode="out-in">
       <div v-if="!showPane" class="layer-controller-icon" @click="showPane = !showPane">图层</div>
       <div v-else class="layer-controller-pane">
         <div class="layer-controller-pane-header">
@@ -97,10 +97,6 @@ defineExpose({ setMap });
 
 <style lang="less" scoped>
 .layer-controller-container {
-  position: absolute;
-  top: 2em;
-  left: 2em;
-
   .layer-controller-icon {
     padding: 0.5em 1em;
     border-radius: 3px;
