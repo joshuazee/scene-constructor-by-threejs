@@ -1,12 +1,15 @@
+import { AnyLayer } from 'pkg/types/three-map-layers';
 import type { Module } from 'vuex';
 import type { RootState } from '..';
 
 export interface MapState {
   layers: Array<any>;
+  currentModel: AnyLayer | undefined;
 }
 
 const state: MapState = {
-  layers: []
+  layers: [],
+  currentModel: undefined
 };
 
 export const mapModel: Module<MapState, RootState> = {
