@@ -1,4 +1,4 @@
-import { AnyLayer } from 'pkg/types/three-map-layers';
+import type { AnyLayer } from 'pkg/types/three-map-layers';
 import type { Module } from 'vuex';
 import type { RootState } from '..';
 

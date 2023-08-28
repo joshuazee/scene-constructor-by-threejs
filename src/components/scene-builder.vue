@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, type Component } from 'vue';
 import { useStore } from 'vuex';
 import ViewOptions from './options-pane/view-options.vue';
 
@@ -21,13 +21,13 @@ const store = useStore();
 const animateKey = ref(1);
 const showPane = ref(false);
 
-const OptionComponentList = ref({});
+const OptionComponentList = ref<Record<string, Component>>({});
 
 const currentOptions = computed(() => {
   const currentModel = store.state.map.currentModel;
 
   if (currentModel) {
-    return OptionComponentList[currentModel.type];
+    return OptionComponentList.value[currentModel.type];
   }
   return ViewOptions;
 });
