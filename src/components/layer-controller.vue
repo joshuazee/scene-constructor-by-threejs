@@ -15,7 +15,7 @@
           class="tree-cls"
           show-checkbox
           node-key="key"
-          :default-expanded-keys="defaultExpandedKes"
+          :default-expanded-keys="defaultExpandedKeys"
           :default-checked-keys="defaultCheckedKeys"
           @check-change="handleCheckChange"
         >
@@ -48,7 +48,7 @@ const store = useStore();
 const treeRef = ref();
 const showPane = ref(false);
 const showLegends = ref(false);
-const defaultExpandedKes = ref<Array<string>>([]);
+const defaultExpandedKeys = ref<Array<string>>([]);
 const defaultCheckedKeys = ref<Array<string>>([]);
 
 const control = new LayerController();
@@ -63,7 +63,7 @@ watch(
         const node = stack.pop();
         !node.key && (node.key = uuid());
         if (node.children) {
-          node.expand && defaultExpandedKes.value.push(node.key);
+          node.expand && defaultExpandedKeys.value.push(node.key);
           stack.push(...node.children);
         } else {
           control.add(node);
@@ -92,7 +92,10 @@ const setMap = (mapView: any) => {
   control.setMap(mapView);
 };
 
-defineExpose({ setMap });
+const getLayer = (key: string) => control.get(key);
+const updateLayer = (options: any) => control.update(options);
+
+defineExpose({ getLayer, setMap, updateLayer });
 </script>
 
 <style lang="less" scoped>

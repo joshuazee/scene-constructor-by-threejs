@@ -12,18 +12,33 @@
 
 <script lang="ts" setup>
 import BaseView from 'pkg/three/view/view-base';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import LayerController from '../layer-controller.vue';
 import SceneBuilder from '../scene-builder.vue';
-// import { useStore } from 'vuex';
+import { useStore } from 'vuex';
 
-// const store = useStore();
+const store = useStore();
 const containerRef = ref<string | Element>('');
 const mapRef = ref<string | Element>('');
 const layerControllerRef = ref();
 const editable = ref(true);
 
 let view: BaseView;
+
+watch(
+  () => store.state.map.editIndex,
+  (val) => {
+    if (val != 0) {
+      const currentModel = store.state.map.currentModel;
+      if (currentModel && currentModel.type) {
+        layerControllerRef.value.updateLayer(currentModel);
+        currentModel.setOptions(store.state.map.currentModel);
+      } else {
+        view.update(currentModel);
+      }
+    }
+  }
+);
 
 onMounted(() => {
   const { width, height } = calcSize();
@@ -38,6 +53,8 @@ onMounted(() => {
   });
   view.setBackground({ alpha: 1, color: '#000' });
   view.animate();
+
+  view.onClick(handlePickModel);
 });
 
 //methods
@@ -58,6 +75,18 @@ const calcSize = () => {
 
 const handleLoadCompleted = () => {
   layerControllerRef.value.setMap(view);
+};
+
+const handlePickModel = (payload: any) => {
+  if (payload.length > 0) {
+    const item = payload[0];
+    const key = item.object.name;
+    if (key) {
+      const layer = layerControllerRef.value.getLayer(key);
+      console.log('pick-layer==================', layer);
+      layer && layer.options && store.commit('map/setCurrentModel', layer.options);
+    }
+  }
 };
 </script>
 

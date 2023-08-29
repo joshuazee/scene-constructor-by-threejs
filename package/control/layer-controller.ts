@@ -5,17 +5,17 @@ import { FloorLayer } from 'pkg/layer/floor-layer';
 
 export class LayerController {
   private layers: Array<BaseLayer>;
-  private view: any;
+  private map: any;
   constructor() {
     this.layers = [];
     // this.view = view;
     //@ts-ignore
     // this.viewer.layerController = this;
   }
-  setMap(view: any) {
-    this.view = view;
+  setMap(map: any) {
+    this.map = map;
     this.layers.forEach((layer) => {
-      layer.origin && this.view.scene.add(layer.origin);
+      layer.origin && this.map.scene.add(layer.origin);
     });
   }
   add(options: AnyLayerOptions) {
@@ -37,7 +37,9 @@ export class LayerController {
     const index = this.layers.findIndex((layer) => layer.key === key);
     if (index >= 0) {
       const layer = this.layers.splice(index, 1)[0];
-      // layer.unload();
+      if (this.map && layer.origin) {
+        this.map.scene.remove(layer.origin);
+      }
     }
   }
   get(key: string) {
@@ -46,6 +48,10 @@ export class LayerController {
   setVisible(key: string, visible: boolean) {
     const layer = this.layers.find((layer) => layer.key === key);
     layer && layer.setVisible(visible);
+  }
+  update(options: AnyLayerOptions) {
+    const layer = this.layers.find((layer) => layer.key === options.key);
+    layer && layer.update(options);
   }
   // clearHighlights() {
   //   // 该方法针对所有点击高亮展示图层做清除

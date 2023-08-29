@@ -84,6 +84,12 @@ export default class ViewBase {
     this.controls.enableRotate = draggable;
     this.controls.enableZoom = zoomable;
   }
+  onClick(callback) {
+    this.pick({ type: 0, callback }, this.scene.children);
+  }
+  onPointMove(callback) {
+    this.pick({ type: 1, callback }, this.scene.children);
+  }
   pick(options, models) {
     const { type = 0, callback } = options;
 
@@ -101,22 +107,25 @@ export default class ViewBase {
       typeof callback === 'function' && callback(intersects);
     });
   }
-  setInteractiveHandle(models, options) {
-    const { type, callback } = options;
-    this.intKey && unByKey(this.intKey);
-    // !this.raycaster && (this.raycaster = new Raycaster());
-    !this.rcp4Int && (this.rcp4Int = new Vector2());
-    this.intKey = on(this.renderer.domElement, type, (event) => {
-      this.rcp4Int.x = (event.offsetX / this.renderer.domElement.width) * 2 - 1;
-      this.rcp4Int.y = -(event.offsetY / this.renderer.domElement.height) * 2 + 1;
-      // 通过摄像机和鼠标位置更新射线
-      this.raycaster.setFromCamera(this.rcp4Int, this.camera);
-
-      // 计算物体和射线的焦点
-      const intersects = this.raycaster.intersectObjects(models);
-      typeof callback === 'function' && callback(intersects);
-    });
+  update(options) {
+    console.log(options);
   }
+  // setInteractiveHandle(models, options) {
+  //   const { type, callback } = options;
+  //   this.intKey && unByKey(this.intKey);
+  //   // !this.raycaster && (this.raycaster = new Raycaster());
+  //   !this.rcp4Int && (this.rcp4Int = new Vector2());
+  //   this.intKey = on(this.renderer.domElement, type, (event) => {
+  //     this.rcp4Int.x = (event.offsetX / this.renderer.domElement.width) * 2 - 1;
+  //     this.rcp4Int.y = -(event.offsetY / this.renderer.domElement.height) * 2 + 1;
+  //     // 通过摄像机和鼠标位置更新射线
+  //     this.raycaster.setFromCamera(this.rcp4Int, this.camera);
+
+  //     // 计算物体和射线的焦点
+  //     const intersects = this.raycaster.intersectObjects(models);
+  //     typeof callback === 'function' && callback(intersects);
+  //   });
+  // }
 }
 
 const events = {};

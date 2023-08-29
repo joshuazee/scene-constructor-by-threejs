@@ -2,7 +2,7 @@ import type { FloorLayer } from 'pkg/layer/floor-layer';
 import type { WallLayer } from 'pkg/layer/wall-layer';
 
 export enum LayerType {
-  WALL,
+  WALL = 1,
   FLOOR
 }
 

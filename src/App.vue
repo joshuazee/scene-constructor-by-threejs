@@ -17,6 +17,7 @@ onMounted(() => {
     .then((response) => {
       const data = handleCommonResponse(response);
       store.commit('map/setLayerConfig', data.layers);
+      store.commit('map/setCurrentModel', data.map);
     })
     .catch((e) => {
       console.log(e);

@@ -1,4 +1,8 @@
 {
+  "map": {
+    "showAxesHelper": true,
+    "axesHelperWidth": 100
+  },
   "layers": [
     {
       "title": "地板",
@@ -7,7 +11,7 @@
       "children": [
         {
           "title": "地板#1",
-          "type": 1,
+          "type": 2,
           "visible": true,
           "center": [0, 0],
           "bottomHeight": 0,
@@ -30,7 +34,7 @@
       "children": [
         {
           "title": "墙#1",
-          "type": 0,
+          "type": 1,
           "visible": true,
           "center": [50, 0],
           "height": 30,
@@ -55,7 +59,7 @@
         },
         {
           "title": "墙#2",
-          "type": 0,
+          "type": 1,
           "visible": true,
           "center": [0, 75],
           "height": 30,
@@ -67,7 +71,7 @@
         },
         {
           "title": "墙#3",
-          "type": 0,
+          "type": 1,
           "visible": true,
           "center": [100, 50],
           "height": 30,
@@ -79,7 +83,7 @@
         },
         {
           "title": "墙#4",
-          "type": 0,
+          "type": 1,
           "visible": true,
           "center": [75, 100],
           "height": 30,
@@ -91,7 +95,7 @@
         },
         {
           "title": "墙#5",
-          "type": 0,
+          "type": 1,
           "visible": true,
           "center": [50, 125],
           "height": 30,
@@ -103,7 +107,7 @@
         },
         {
           "title": "墙#6",
-          "type": 0,
+          "type": 1,
           "visible": true,
           "center": [25, 150],
           "height": 30,

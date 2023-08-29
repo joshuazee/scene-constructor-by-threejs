@@ -6,7 +6,9 @@
         <el-icon v-else><ArrowRight /></el-icon>
       </div>
       <div v-if="showPane" class="scene-builder-pane">
-        <component :is="currentOptions"></component>
+        <div class="scene-builder-pane-header">属性编辑</div>
+        <base-options></base-options>
+        <!-- <component :is="currentOptions"></component> -->
       </div>
     </div>
   </transition>
@@ -14,23 +16,12 @@
 
 <script lang="ts" setup>
 import { ref, computed, type Component } from 'vue';
-import { useStore } from 'vuex';
-import ViewOptions from './options-pane/view-options.vue';
+import BaseOptions from './options-pane/base-options.vue';
 
-const store = useStore();
 const animateKey = ref(1);
 const showPane = ref(false);
 
 const OptionComponentList = ref<Record<string, Component>>({});
-
-const currentOptions = computed(() => {
-  const currentModel = store.state.map.currentModel;
-
-  if (currentModel) {
-    return OptionComponentList.value[currentModel.type];
-  }
-  return ViewOptions;
-});
 
 const handleChangePaneStatus = () => {
   animateKey.value++;
@@ -43,8 +34,9 @@ const handleChangePaneStatus = () => {
   display: flex;
   align-items: flex-start;
   .scene-builder-icon {
-    padding: 0.5em 1em;
-    border-radius: 3px;
+    padding: 0.5em;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
     background: @themeColor;
     color: #fff;
     cursor: pointer;
@@ -54,6 +46,9 @@ const handleChangePaneStatus = () => {
     background: #fff;
     height: 80vh;
     min-width: 400px;
+    .scene-builder-pane-header {
+      padding: 0.5em;
+    }
   }
 }
 </style>

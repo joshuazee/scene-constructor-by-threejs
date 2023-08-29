@@ -27,6 +27,7 @@ export class WallLayer extends BaseLayer {
       side: DoubleSide
     });
     let wall = new Mesh(geometry, material);
+    wall.name = options.key || '';
 
     if (doors && doors.length > 0) {
       doors.forEach((door) => {
@@ -57,7 +58,9 @@ export class WallLayer extends BaseLayer {
 
     this.origin = o3d;
   }
-  unload() {}
+  update(options: WallOptions) {
+    console.log(options);
+  }
 }
 
 const createDoorWindowModel = (wall: Mesh, options: DoorWindowOptions) => {
