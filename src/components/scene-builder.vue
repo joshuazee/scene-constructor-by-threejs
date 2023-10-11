@@ -6,22 +6,33 @@
         <el-icon v-else><ArrowRight /></el-icon>
       </div>
       <div v-if="showPane" class="scene-builder-pane">
-        <div class="scene-builder-pane-header">属性编辑</div>
+        <div class="scene-builder-pane-header">
+          属性编辑：
+          <span style="color: brown">{{ currentModel }}</span>
+        </div>
         <base-options></base-options>
-        <!-- <component :is="currentOptions"></component> -->
       </div>
     </div>
   </transition>
 </template>
 
-<script lang="ts" setup>
-import { ref, computed, type Component } from 'vue';
+<script setup>
+import { ref, computed } from 'vue';
 import BaseOptions from './options-pane/base-options.vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const animateKey = ref(1);
 const showPane = ref(false);
 
-const OptionComponentList = ref<Record<string, Component>>({});
+const currentModel = computed(() => {
+  const model = store.state.map.currentModel;
+  if (model && model.type) {
+    return model.title;
+  } else {
+    return '场景';
+  }
+});
 
 const handleChangePaneStatus = () => {
   animateKey.value++;

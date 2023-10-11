@@ -1,5 +1,10 @@
 import type { BaseLayer } from 'pkg/layer/base-layer';
-import { LayerType, type AnyLayerOptions } from '../types/three-map-layers';
+import {
+  LayerType,
+  type BaseLayerOptions,
+  type WallOptions,
+  type FloorOptions
+} from '../types/three-map-layers';
 import { WallLayer } from 'pkg/layer/wall-layer';
 import { FloorLayer } from 'pkg/layer/floor-layer';
 
@@ -18,15 +23,15 @@ export class LayerController {
       layer.origin && this.map.scene.add(layer.origin);
     });
   }
-  add(options: AnyLayerOptions) {
+  add(options: BaseLayerOptions) {
     const { type } = options;
     let layer: BaseLayer;
     switch (type) {
-      case LayerType.WALL:
-        layer = new WallLayer(options);
+      case LayerType.wall:
+        layer = new WallLayer(options as WallOptions);
         break;
-      case LayerType.FLOOR:
-        layer = new FloorLayer(options);
+      case LayerType.floor:
+        layer = new FloorLayer(options as FloorOptions);
         break;
       default:
         throw 'invalidated layer constructor options';
@@ -49,7 +54,7 @@ export class LayerController {
     const layer = this.layers.find((layer) => layer.key === key);
     layer && layer.setVisible(visible);
   }
-  update(options: AnyLayerOptions) {
+  update(options: BaseLayerOptions) {
     const layer = this.layers.find((layer) => layer.key === options.key);
     layer && layer.update(options);
   }

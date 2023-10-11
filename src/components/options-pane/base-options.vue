@@ -1,43 +1,33 @@
 <template>
-  <el-form v-model="currentOptions.options" style="padding: 1em">
-    <component
-      :is="currentOptions.comp"
-      :childType="currentOptions.childType"
-      @updateOptions="handleUpdateView"
-    ></component>
+  <el-form v-model="options" style="padding: 1em" :label-width="100">
+    <!-- <model-base-options v-if="showModelBaseOptions"></model-base-options> -->
+    <component :is="currentOptions"></component>
   </el-form>
 </template>
 
-<script lang="ts" setup>
-import { computed, provide } from 'vue';
+<script setup>
+import { computed, ref, provide } from 'vue';
 import { useStore } from 'vuex';
 import { OptionsComponentList } from '.';
+// import ModelBaseOptions from './model-base-options.vue';
 
 const store = useStore();
+const showModelBaseOptions = ref(false);
+const options = ref({});
 const currentOptions = computed(() => {
   const currentModel = store.state.map.currentModel;
-  const options = {
-    comp: undefined,
-    options: undefined,
-    childType: undefined
-  };
 
   if (currentModel && currentModel.type) {
-    options.comp = OptionsComponentList['model'];
-    options.childType = currentModel.type;
+    showModelBaseOptions.value = true;
+    return OptionsComponentList[currentModel.type];
   } else {
-    options.comp = OptionsComponentList['viewer'];
+    showModelBaseOptions.value = false;
   }
-  options.options = currentModel;
-  console.log(options);
-  return options;
+  // return undefined;
+  return OptionsComponentList['view'];
 });
 
 provide('options', currentOptions.value.options);
-
-const handleUpdateView = (val: any) => {
-  store.commit('map/setEditIndex', val);
-};
 </script>
 
 <style lang="less" scoped></style>

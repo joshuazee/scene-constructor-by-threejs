@@ -19,6 +19,7 @@ export default class ViewBase {
       width = 400,
       height = 300,
       showAxesHelper = true,
+      axesHelperWidth = 100,
       mouseInteraction = true,
       interActionType = 0,
       cssRenderer = false
@@ -56,12 +57,16 @@ export default class ViewBase {
       }
     }
 
-    if (showAxesHelper === true) {
-      const axes = new AxesHelper(100);
-      this.scene.add(axes);
-    }
+    // if (showAxesHelper === true) {
+    const axes = new AxesHelper(axesHelperWidth);
+    axes.visible = showAxesHelper;
+    this.axesHelper = axes;
+    this.scene.add(axes);
+    // }
 
     this.raycaster = new Raycaster();
+
+    // this.update(options);
   }
   animate(callback) {
     requestAnimationFrame(() => {
@@ -109,6 +114,8 @@ export default class ViewBase {
   }
   update(options) {
     console.log(options);
+    const { showAxesHelper } = options;
+    this.axesHelper.visible = showAxesHelper;
   }
   // setInteractiveHandle(models, options) {
   //   const { type, callback } = options;

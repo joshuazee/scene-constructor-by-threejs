@@ -1,17 +1,17 @@
-import type { AnyLayer } from 'pkg/types/three-map-layers';
 import type { Module } from 'vuex';
 import type { RootState } from '..';
 
 export interface MapState {
+  map: any;
   layers: Array<any>;
-  currentModel: AnyLayer | undefined;
+  currentModel: any;
   editIndex: number;
 }
 
 const state: MapState = {
+  map: {},
   layers: [],
-  currentModel: undefined,
-  editIndex: 0
+  currentModel: undefined
 };
 
 export const mapModel: Module<MapState, RootState> = {
@@ -23,11 +23,11 @@ export const mapModel: Module<MapState, RootState> = {
       state.layers = payload;
       console.log(payload);
     },
+    setMapConfig(state: MapState, payload: any) {
+      state.map = payload;
+    },
     setCurrentModel(state: MapState, payload: any) {
       state.currentModel = payload;
-    },
-    setEditIndex(state: MapState, payload: any) {
-      state.editIndex++;
     }
   }
 };

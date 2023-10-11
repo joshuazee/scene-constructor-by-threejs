@@ -1,10 +1,11 @@
+import { Enumify } from 'enumify';
 import type { FloorLayer } from 'pkg/layer/floor-layer';
 import type { WallLayer } from 'pkg/layer/wall-layer';
 
-export enum LayerType {
-  WALL = 1,
-  FLOOR
-}
+export const LayerType = {
+  wall: 'wall',
+  floor: 'floor'
+};
 
 export enum LegendsType {
   IMG = 0,
@@ -38,26 +39,26 @@ export interface BaseLayerOptions {
   type: LayerType;
   hasLegends?: boolean;
   legends?: LegendsOptions;
-  url?: string;
+  // url?: string;
   visible?: boolean;
-  children?: Array<AnyLayerOptions>;
+  children?: Array<BaseLayerOptions>;
 }
 
 export interface FloorOptions extends BaseLayerOptions {
-  type: LayerType.FLOOR;
   coordinates: Array<[number, number]>;
   height: number;
   bottomHeight: number;
-  center: [number, number];
+  centerX: number;
+  centerY: number;
   color: string;
 }
 
 export interface WallOptions extends BaseLayerOptions {
-  type: LayerType.WALL;
   width: number;
   height: number;
   depth: number;
-  center: [number, number];
+  centerX: number;
+  centerY: number;
   rotate: number;
   color: string;
   opacity: number;
@@ -69,7 +70,8 @@ export interface DoorWindowOptions {
   width: number;
   height: number;
   depth: number;
-  center: [number, number];
+  centerX: number;
+  centerY: number;
   texture: string;
   border: {
     width: number;
@@ -78,6 +80,6 @@ export interface DoorWindowOptions {
   };
 }
 
-export type AnyLayer = WallLayer | FloorLayer;
+// export type AnyLayer = WallLayer | FloorLayer;
 
-export type AnyLayerOptions = WallOptions | FloorOptions;
+// export type AnyLayerOptions = WallOptions | FloorOptions;

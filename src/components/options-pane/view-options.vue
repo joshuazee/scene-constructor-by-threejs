@@ -1,32 +1,26 @@
 <template>
-  <el-collapse accordion>
-    <el-collapse-item title="辅助线">
-      <el-form-item label="是否显示">
-        <el-checkbox v-model="options.showAxesHelper"></el-checkbox>
-      </el-form-item>
-      <el-form-item label="辅助线长度">
-        <el-input-number v-model="options.axesHelperWidth"></el-input-number>
-      </el-form-item>
-    </el-collapse-item>
-  </el-collapse>
+  <el-form-item label="显示辅助线">
+    <el-checkbox v-model="options.showAxesHelper"></el-checkbox>
+  </el-form-item>
 </template>
 
-<script lang="ts" setup>
-import { ref, inject, watch } from 'vue';
+<script setup>
+import { ref, watch } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const emits = defineEmits(['updateOptions']);
 
-const options = ref<any>(inject('options', {}));
+const options = ref(store.state.map.map);
 
-watch(
-  options,
-  (val, oldVal) => {
-    if (val == oldVal) {
-      emits('updateOptions', val);
-    }
-  },
-  { deep: true }
-);
+// watch(
+//   () => store.state.map.map,
+//   (val) => {
+//     console.log('mapConfig变化');
+//     // options.value = val;
+//   },
+//   { deep: true }
+// );
 </script>
 
 <style lang="less" scoped></style>

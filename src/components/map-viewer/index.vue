@@ -4,7 +4,6 @@
   </div>
   <layer-controller
     ref="layerControllerRef"
-    class="layer-controller-position"
     @load-completed="handleLoadCompleted"
   ></layer-controller>
   <scene-builder v-if="editable" class="scene-builder-position"></scene-builder>
@@ -26,18 +25,12 @@ const editable = ref(true);
 let view: BaseView;
 
 watch(
-  () => store.state.map.editIndex,
+  () => store.state.map.map,
   (val) => {
-    if (val != 0) {
-      const currentModel = store.state.map.currentModel;
-      if (currentModel && currentModel.type) {
-        layerControllerRef.value.updateLayer(currentModel);
-        currentModel.setOptions(store.state.map.currentModel);
-      } else {
-        view.update(currentModel);
-      }
-    }
-  }
+    console.log('响应mapConfig变化===', val);
+    view.update(val);
+  },
+  { deep: true }
 );
 
 onMounted(() => {
@@ -85,8 +78,10 @@ const handlePickModel = (payload: any) => {
       const layer = layerControllerRef.value.getLayer(key);
       console.log('pick-layer==================', layer);
       layer && layer.options && store.commit('map/setCurrentModel', layer.options);
+      return;
     }
   }
+  store.commit('map/setCurrentModel', undefined);
 };
 </script>
 
@@ -95,11 +90,11 @@ const handlePickModel = (payload: any) => {
   position: relative;
   height: 100%;
 }
-.layer-controller-position {
-  position: absolute;
-  top: 2em;
-  left: 2em;
-}
+// .layer-controller-position {
+//   position: absolute;
+//   top: 2em;
+//   left: 2em;
+// }
 .scene-builder-position {
   position: absolute;
   right: 0;
