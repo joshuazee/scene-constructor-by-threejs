@@ -19,7 +19,6 @@
     "@tweenjs/tween.js": "^21.0.0",
     "axios": "^1.4.0",
     "element-plus": "^2.3.9",
-    "enumify": "^2.0.0",
     "three": "^0.155.0",
     "uuid": "^9.0.0",
     "vue": "^3.3.4",
