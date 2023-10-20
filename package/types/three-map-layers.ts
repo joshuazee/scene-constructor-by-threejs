@@ -1,4 +1,3 @@
-import { Enumify } from 'enumify';
 import type { FloorLayer } from 'pkg/layer/floor-layer';
 import type { WallLayer } from 'pkg/layer/wall-layer';
 

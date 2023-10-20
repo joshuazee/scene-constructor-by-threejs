@@ -15,6 +15,9 @@
   <el-form-item label="厚度(cm)">
     <el-input-number v-model="options.depth"></el-input-number>
   </el-form-item>
+  <el-form-item label="角度">
+    <el-input-number v-model="options.rotate" :min="0" :max="359"></el-input-number>
+  </el-form-item>
   <!-- <el-form-item label="应用纹理">
     <el-switch v-model="options.useTexture"></el-switch>
   </el-form-item> -->
